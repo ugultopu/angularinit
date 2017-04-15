@@ -42,11 +42,16 @@ case "$#" in
 	if [ ! -e "$quickstart" ]
 	then
 		git clone "$quickstart_repo" "$quickstart"
+		cd "$quickstart"
+		npm install
 	fi
 
 	# Update quickstart structure
 	cd "$quickstart"
-	git pull
+	if ! git pull | grep 'Already up-to-date'
+	then
+		npm install
+	fi
 
 	# Copy the quickstart for the new project
 	cp -r "$quickstart" "$project"
