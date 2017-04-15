@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# Create an Angular project using the quickstart script
+# Copyright (c) 2017 Utku Gultopu
+
+# Exit if a command fails
+set -e
+
+# Usage information
+progname="$(basename $0)"
+usage="Usage:
+	$progname project_name"
+
+case "$#" in
+1)
+	angular="$HOME/src/angular"
+	project="$angular/$1"
+	quickstart="$angular/quickstart"
+	quickstart_repo="https://github.com/angular/quickstart.git"
+
+	# Create angular root directory if not exists
+	if [ ! -e "$angular" ]
+	then
+		mkdir -p "$angular"
+	fi
+
+	# Check project name
+	if [ "$1" == "quickstart" ]
+	then
+		echo "Project name cannot be \"quickstart\""
+		exit
+	fi
+	
+	# Check if project exists. If yes, exit
+	if [ -e "$project" ]
+	then
+		echo "$project already exists."
+		exit
+	fi
+
+	# Download quickstart if not present
+	if [ ! -e "$quickstart" ]
+	then
+		git clone "$quickstart_repo" "$quickstart"
+	fi
+
+	# Update quickstart structure
+	cd "$quickstart"
+	git pull
+
+	# Copy the quickstart for the new project
+	cp -r "$quickstart" "$project"
+
+	# Clean the non-essential files that come from quickstart
+	cd "$project"
+	xargs rm -rf < non-essential-files.osx.txt
+	rm src/app/*.spec*.ts
+	rm non-essential-files.osx.txt
+
+	# Create a new git repository and add .gitignore file
+	git init
+	printf "node_modules/\n\n" > .gitignore
+	git add .
+	git commit -m "Create project"
+
+	# Report that project has been created successfully
+	echo "$project has been created."
+	;;
+*)
+	echo "$usage"
+esac
+
