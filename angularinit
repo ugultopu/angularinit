@@ -42,22 +42,18 @@ case "$#" in
 	if [ ! -e "$quickstart" ]
 	then
 		git clone "$quickstart_repo" "$quickstart"
-		cd "$quickstart"
-		npm install
 	fi
 
 	# Update quickstart structure
 	cd "$quickstart"
-	if ! git pull | grep 'Already up-to-date'
-	then
-		npm install
-	fi
+	git pull
 
 	# Copy the quickstart for the new project
 	cp -r "$quickstart" "$project"
 
 	# Clean the non-essential files that come from quickstart
 	cd "$project"
+	npm install
 	xargs rm -rf < non-essential-files.osx.txt
 	rm src/app/*.spec*.ts
 	rm non-essential-files.osx.txt
