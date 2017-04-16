@@ -60,7 +60,11 @@ case "$#" in
 
 	# Create a new git repository and add .gitignore file
 	git init
-	printf "node_modules/\n\n" > .gitignore
+	printf "*.js\n" > .gitignore
+	printf "*.js.map\n" >> .gitignore
+	printf "\n" >> .gitignore
+	printf "node_modules/\n" >> .gitignore
+	printf "\n" >> .gitignore
 	git add .
 	git commit -m "Create project"
 
