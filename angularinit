@@ -53,7 +53,7 @@ case "$#" in
 
 	# Clean the non-essential files that come from quickstart
 	cd "$project"
-	npm install
+	yarn install
 	xargs rm -rf < non-essential-files.osx.txt
 	rm src/app/*.spec*.ts
 	rm non-essential-files.osx.txt
